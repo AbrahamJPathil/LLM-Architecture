@@ -1,0 +1,11 @@
+neo4j:
+  uri: "bolt://localhost:7687"
+  username: "neo4j"
+  password: "test1234"
+  database: "context_graph"
+  
+context_engineering:
+  max_token_limit: 4000
+  relevance_threshold: 0.7
+  cache_ttl_seconds: 300
+  max_depth_traversal: 3
