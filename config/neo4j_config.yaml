@@ -1,11 +1,14 @@
 neo4j:
   uri: "bolt://localhost:7687"
-  username: "neo4j"
-  password: "test1234"
-  database: "context_graph"
-  
+  username: "neo4j" 
+  password: "${NEO4J_PASSWORD}"
+  database: "neo4j"
+  max_connection_pool_size: 50
+  connection_timeout: 5
+
 context_engineering:
   max_token_limit: 4000
   relevance_threshold: 0.7
   cache_ttl_seconds: 300
   max_depth_traversal: 3
+  query_timeout_seconds: 30
