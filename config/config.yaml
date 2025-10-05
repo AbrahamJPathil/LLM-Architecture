@@ -1,0 +1,213 @@
+# PromptEvolve Configuration File
+# Configuration for the Self-Improving Prompt Engineering Agent
+
+# API Provider Configuration
+# Options: "openai" or "gemini"
+api_provider: "openai"  # Now using OpenAI with working API key
+
+# API Keys (can also be set via environment variables)
+# OPENAI_API_KEY or GEMINI_API_KEY
+api_keys:
+  openai: null  # Set via OPENAI_API_KEY env var (more secure)
+  gemini: null  # Set via GEMINI_API_KEY env var for testing
+
+# LLM Model Configuration
+models:
+  # Smart model for prompt generation (Prompt Challenger/Writer)
+  prompt_writer:
+    openai: "gpt-4-turbo-preview"
+    gemini: "gemini-2.0-flash-exp"
+    temperature: 0.7
+    max_tokens: 2000
+    
+  # Production model for prompt execution (Prompt Solver)
+  prompt_solver:
+    openai: "gpt-3.5-turbo"
+    gemini: "gemini-2.0-flash-exp"
+    temperature: 0.3
+    max_tokens: 1500
+    
+  # Judge model for evaluation (Prompt Verifier)
+  prompt_verifier:
+    openai: "gpt-4-turbo-preview"
+    gemini: "gemini-2.0-flash-exp"
+    temperature: 0.2
+    max_tokens: 1000
+
+# Evolution Engine Settings
+evolution:
+  # Maximum iterations for the R-Zero loop
+  max_iterations: 10
+  
+  # Minimum iterations before early stopping
+  min_iterations: 3
+  
+  # Population size for each generation
+  population_size: 5
+  
+  # Top percentage of prompts to select for next generation
+  selection_top_percentage: 0.30
+  
+  # Minimum number of prompts to keep (even if below threshold)
+  min_selection_count: 2
+  
+  # Enable prompt combination/crossover
+  enable_crossover: true
+  
+  # Mutation rate for prompt variations (0.0 to 1.0)
+  mutation_rate: 0.3
+
+# Performance Thresholds
+thresholds:
+  # Minimum success rate to consider prompt "good enough"
+  success_rate: 0.85
+  
+  # Minimum average quality score (0.0 to 1.0)
+  quality_score: 0.80
+  
+  # Minimum consistency score (0.0 to 1.0)
+  consistency_score: 0.75
+  
+  # Maximum acceptable average execution time (seconds)
+  max_execution_time: 5.0
+  
+  # Improvement threshold for early stopping (%)
+  min_improvement_threshold: 0.02
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s"
+  file: "logs/prompt_evolution.log"
+  console: true
+
+# Self-Debate Configuration (System 2 Thinking)
+self_debate:
+  enabled: true
+  max_rounds: 2
+  
+  # Rubric priorities (higher = more important)
+  rubric:
+    correctness: 10
+    simplicity: 7
+    safety: 9
+    rollback_plan: 8
+
+# Domain-Specific Configurations
+domains:
+  legal:
+    base_prompt_template: "You are a senior legal analyst. Analyze the following legal query with precision and cite relevant sources."
+    
+    evaluation_criteria:
+      citation_quality: 0.3
+      accuracy: 0.4
+      completeness: 0.2
+      clarity: 0.1
+    
+    thresholds:
+      success_rate: 0.90
+      quality_score: 0.85
+    
+    test_scenario_count: 20
+  
+  ontology:
+    base_prompt_template: "You are an expert knowledge engineer. Extract and structure entities and relationships from the following text."
+    
+    evaluation_criteria:
+      entity_precision: 0.35
+      relationship_accuracy: 0.35
+      schema_compliance: 0.20
+      completeness: 0.10
+    
+    thresholds:
+      success_rate: 0.85
+      quality_score: 0.80
+    
+    test_scenario_count: 25
+  
+  admin:
+    base_prompt_template: "You are an efficient administrative assistant. Process the following request accurately and concisely."
+    
+    evaluation_criteria:
+      task_completion: 0.4
+      response_quality: 0.3
+      efficiency: 0.2
+      tone: 0.1
+    
+    thresholds:
+      success_rate: 0.80
+      quality_score: 0.75
+    
+    test_scenario_count: 15
+
+# Data Generation Settings
+data_generation:
+  # Use high-quality model for generating synthetic data
+  generator_model: "gpt-4-turbo-preview"
+  
+  # Number of synthetic test cases to generate per domain
+  default_scenario_count: 20
+  
+  # Mutation strategies for creating "bad outputs"
+  mutation_strategies:
+    - "introduce_factual_error"
+    - "change_tone"
+    - "omit_key_information"
+    - "add_irrelevant_information"
+    - "introduce_logical_inconsistency"
+  
+  # Require human verification before use
+  require_human_verification: true
+  
+  # Output directory for generated datasets
+  output_directory: "data/synthetic"
+
+# Prompt Variation Techniques
+prompt_techniques:
+  chain_of_thought:
+    enabled: true
+    template: "Let's approach this step by step:\n1. First, analyze the input\n2. Then, identify key requirements\n3. Finally, formulate a comprehensive response"
+  
+  few_shot:
+    enabled: true
+    max_examples: 3
+    include_counterexamples: true
+  
+  role_specification:
+    enabled: true
+    roles:
+      - "senior expert"
+      - "analytical specialist"
+      - "detail-oriented professional"
+  
+  step_by_step:
+    enabled: true
+    format: "numbered_list"  # numbered_list, checklist, bullet_points
+
+# Safety and Monitoring
+safety:
+  # Enable safety checks on generated prompts
+  enable_safety_checks: true
+  
+  # Maximum prompt length (characters)
+  max_prompt_length: 4000
+  
+  # Rate limiting (requests per minute)
+  rate_limit: 60
+  
+  # Timeout for LLM calls (seconds)
+  llm_timeout: 30
+
+# File Paths
+paths:
+  # Directory for storing evolution history
+  history_directory: "data/history"
+  
+  # Directory for storing generated prompts
+  prompts_directory: "prompts"
+  
+  # Directory for test scenarios
+  test_scenarios_directory: "data/test_scenarios"
+  
+  # Directory for results and metrics
+  results_directory: "results"
