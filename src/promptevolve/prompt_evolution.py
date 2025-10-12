@@ -64,7 +64,7 @@ def call_llm(
             model=model,
             messages=messages,
             temperature=temperature,
-            max_tokens=max_tokens
+            max_completion_tokens=max_tokens  # Changed from max_tokens for gpt-5-mini compatibility
         )
         return response.choices[0].message.content
     elif provider == "gemini":
@@ -582,7 +582,7 @@ List specific concerns about correctness, simplicity, safety, and rollback capab
                     {"role": "user", "content": skeptic_message}
                 ],
                 model=self.model,
-                temperature=0.3,
+                temperature=1.0,  # GPT-5 mini only supports temperature=1
                 max_tokens=800
             )
             
@@ -619,7 +619,7 @@ Format your response as JSON:
                     {"role": "user", "content": judge_message}
                 ],
                 model=self.model,
-                temperature=0.2,
+                temperature=1.0,  # GPT-5 mini only supports temperature=1
                 max_tokens=1000
             )
             

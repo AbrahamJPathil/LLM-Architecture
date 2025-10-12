@@ -5,7 +5,7 @@ description = "Self-Improving Prompt Engineering Agent using R-Zero Co-Evolution
 authors = [
     {name = "Abraham J Pathil", email = "abraham@example.com"}
 ]
-readme = "docs/README.md"
+readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 keywords = ["prompt-engineering", "llm", "ai", "optimization", "evolutionary-algorithms"]
@@ -16,6 +16,9 @@ dependencies = [
     "openai>=1.0.0",
     "python-json-logger>=2.0.0",
     "google-generativeai>=0.8.5",
+    "typer>=0.9.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
 ]
 
 [project.optional-dependencies]
@@ -43,8 +46,7 @@ Repository = "https://github.com/AbrahamJPathil/LLM-Architecture"
 Documentation = "https://github.com/AbrahamJPathil/LLM-Architecture/blob/project-PromptEvolve/docs/README.md"
 
 [project.scripts]
-promptevolve = "promptevolve.prompt_evolution:main"
-promptevolve-datagen = "promptevolve.data_generator:main"
+promptevolve = "promptevolve.cli:app"
 
 [build-system]
 requires = ["hatchling"]

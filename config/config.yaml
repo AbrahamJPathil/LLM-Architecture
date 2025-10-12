@@ -15,23 +15,23 @@ api_keys:
 models:
   # Smart model for prompt generation (Prompt Challenger/Writer)
   prompt_writer:
-    openai: "gpt-4-turbo-preview"
+    openai: "gpt-5-mini"
     gemini: "gemini-2.0-flash-exp"
-    temperature: 0.7
+    temperature: 1.0  # GPT-5 mini only supports temperature=1
     max_tokens: 2000
     
   # Production model for prompt execution (Prompt Solver)
   prompt_solver:
-    openai: "gpt-3.5-turbo"
+    openai: "gpt-5-mini"
     gemini: "gemini-2.0-flash-exp"
-    temperature: 0.3
+    temperature: 1.0  # GPT-5 mini only supports temperature=1
     max_tokens: 1500
     
   # Judge model for evaluation (Prompt Verifier)
   prompt_verifier:
-    openai: "gpt-4-turbo-preview"
+    openai: "gpt-5-mini"
     gemini: "gemini-2.0-flash-exp"
-    temperature: 0.2
+    temperature: 1.0  # GPT-5 mini only supports temperature=1
     max_tokens: 1000
 
 # Evolution Engine Settings

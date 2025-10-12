@@ -4,11 +4,46 @@ An AI Engineering System designed to automate and optimize LLM interactions thro
 
 ---
 
+## 🚀 Quick Start (CLI)
+
+The easiest way to use PromptEvolve:
+
+```bash
+# 1. Install dependencies (one time)
+uv sync
+
+# 2. Define: Turn vague input into complete prompt (no evolution)
+uv run promptevolve define "chatbot for billing"
+# Output: 3000+ char complete system prompt from 19 char input!
+
+# 3. Evolve: Full pipeline (define → enhance → evolve)
+uv run promptevolve evolve "chatbot for billing"
+# Output: Production-ready, battle-tested optimized prompt
+
+# 4. Advanced options
+uv run promptevolve evolve "legal assistant" -i 15 -p 8 -o results/legal.json -v
+```
+
+**Two Main Commands:**
+- `define` - TaskDefiner only (vague → complete prompt)
+- `evolve` - Full pipeline (vague → complete → optimized)
+
+**Features:**
+- ✨ Transforms vague input into complete system prompts automatically
+- 🔒 Auto-loads `.env` file (no bash scripts needed)
+- 🎯 Type-safe with Typer (auto-validation)
+- 📊 Beautiful Rich-formatted output
+- 🌍 Cross-platform (Windows, Mac, Linux)
+
+---
+
 # Table of Contents
 
-1. [PromptEvolve: Self-Improving Prompt Engineering Agent](#promptevolve)
-2. [Task Definer System](#task-definer-system)
-3. [Integration Guide](#integration-guide)
+1. [Quick Start](#quick-start-cli)
+2. [PromptEvolve: Self-Improving Prompt Engineering Agent](#promptevolve)
+3. [CLI Usage](#cli-usage)
+4. [Task Definer System](#task-definer-system)
+5. [Integration Guide](#integration-guide)
 
 ---
 
@@ -418,6 +453,250 @@ pytest test_evolution_engine.py --cov=prompt_evolution --cov-report=html
 2. **API Rate Limits**: Adjust `safety.rate_limit` in config.yaml
 3. **Memory Issues**: Reduce `evolution.population_size`
 4. **Low Success Rates**: Review test scenarios, adjust thresholds, increase iterations
+
+---
+
+<a name="cli-usage"></a>
+## 💻 CLI Usage
+
+The **PromptEvolve CLI** has two main commands powered by **Typer** and **Rich**.
+
+### Commands
+
+```bash
+# Show all commands
+uv run promptevolve --help
+
+# Show version
+uv run promptevolve version
+```
+
+---
+
+#### 1. **define** - TaskDefiner (Enhancement Only)
+```bash
+uv run promptevolve define "vague prompt here"
+```
+
+**What it does:**
+- Takes your vague input (e.g., "billing chatbot")
+- Analyzes domain, objectives, complexity
+- **Generates a complete, structured system prompt**
+- Fills gaps with intelligent defaults
+- Adds domain knowledge and best practices
+- **Stops before evolution** (fast, cheap)
+
+**Example:**
+```bash
+uv run promptevolve define "chatbot for billing"
+```
+
+**Output:**
+```
+📋 Task Definition & Prompt Enhancement
+
+Step 1: Analyzing your input...
+   Domain: customer_support
+   Complexity: moderate
+   Objectives: 8
+
+Step 2: Enhancing prompt with domain knowledge...
+
+╭─ ✨ ENHANCED INITIAL PROMPT ─────────────────────────╮
+│ You are a Billing Support Specialist AI whose core  │
+│ purpose is to assist customers with billing...       │
+│                                                      │
+│ Role & responsibilities:                             │
+│ - Answer billing inquiries clearly                   │
+│ - Retrieve invoices and payment history              │
+│ - Provide secure payment links                       │
+│ - Handle disputes and refund requests                │
+│ ...                                                  │
+│ [Complete 3000+ character professional prompt]       │
+╰──────────────────────────────────────────────────────╯
+
+Original: 19 chars → Enhanced: 3318 chars
+```
+
+**Use when:**
+- You want to see the enhanced prompt without evolving
+- You need a quick, complete system prompt
+- You're testing different phrasings
+- You want to manually review before evolution
+
+---
+
+#### 2. **evolve** - Full Pipeline (Define → Evolve)
+```bash
+uv run promptevolve evolve "vague prompt here"
+```
+
+**What it does:**
+1. **Define:** Analyzes and enhances your vague input (same as `define` command)
+2. **Generate Scenarios:** Creates test cases automatically
+3. **Evolve:** Runs genetic algorithm optimization
+4. **Returns:** Production-ready, battle-tested final prompt
+
+**Example:**
+```bash
+uv run promptevolve evolve "chatbot for billing" -i 10 -v
+```
+
+**Output:**
+```
+🚀 PromptEvolve - Full Optimization Pipeline
+
+📊 Step 1: Analyzing your input...
+   Domain: customer_support
+   Complexity: moderate
+   Objectives: 8
+
+✨ Step 2: Enhancing prompt with domain knowledge...
+   Enhanced prompt: 3318 characters
+
+╭─ ENHANCED INITIAL PROMPT ───────────────────────────╮
+│ [Shows the complete enhanced prompt if --verbose]   │
+╰──────────────────────────────────────────────────────╯
+
+🎯 Step 3: Generating test scenarios...
+   Created 3 test scenarios
+
+🧬 Step 4: Evolving the enhanced prompt...
+   Running up to 10 iterations with population size 5
+   This may take a few minutes...
+
+✨ Evolution Complete!
+
+╭─ 🏆 FINAL OPTIMIZED PROMPT ──────────────────────────╮
+│ You are an expert Billing Support Specialist...     │
+│ [Even better, battle-tested version]                 │
+╰──────────────────────────────────────────────────────╯
+
+Score:       0.9567
+Iterations:  7
+Evaluations: 35
+```
+
+**Use when:**
+- You want the best possible prompt for production
+- You're ready to invest time/API calls for quality
+- You need an optimized, tested system prompt
+
+---
+
+### Options
+
+```bash
+# Short flags
+uv run promptevolve evolve "prompt" -i 15 -p 8 -o results/output.json -v
+
+# Long flags
+uv run promptevolve evolve "prompt" \
+  --iterations 20 \
+  --population 10 \
+  --output results/my_result.json \
+  --verbose
+```
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `-i, --iterations` | Max evolution iterations | 10 |
+| `-p, --population` | Population size | 5 |
+| `-o, --output` | Save results to JSON file | None |
+| `-v, --verbose` | Show enhanced prompt | False |
+
+---
+
+### Example Use Cases
+
+```bash
+# Customer Support (define only)
+uv run promptevolve define "customer support agent"
+
+# Billing Chatbot (full evolution)
+uv run promptevolve evolve "billing chatbot" -i 15 -v
+
+# Legal Assistant (save results)
+uv run promptevolve evolve "legal contract analyzer" -o results/legal.json
+
+# Medical Triage (high quality)
+uv run promptevolve evolve "medical triage assistant" -i 20 -p 10 --verbose
+```
+
+---
+
+### How It Works
+
+```
+User Input: "billing chatbot" (vague, 19 chars)
+                ↓
+    ┌───────────────────────┐
+    │   define command      │
+    │   (TaskDefiner)       │
+    └───────────────────────┘
+                ↓
+    TaskAnalyzer extracts:
+    - Domain: customer_support
+    - Objectives: 8 specific goals
+    - Complexity: moderate
+                ↓
+    PromptEnhancer generates:
+    - Complete 3318-char system prompt
+    - Domain best practices
+    - Response structure
+    - Edge cases
+                ↓
+    ENHANCED PROMPT (ready to use!)
+                ↓
+    [If using 'evolve' command, continues...]
+                ↓
+    ScenarioGenerator creates:
+    - 3-5 test scenarios
+    - Desired vs bad outputs
+                ↓
+    PromptEvolution optimizes:
+    - Genetic algorithm
+    - Tests against scenarios
+    - 10+ iterations
+                ↓
+    FINAL OPTIMIZED PROMPT (production-ready!)
+```
+
+---
+
+### Why Two Commands?
+
+**`define`** = Quick enhancement (2-3 API calls, ~10 seconds)
+- Preview what goes into evolution
+- Get usable prompt without waiting
+- Iterate quickly on phrasing
+
+**`evolve`** = Full optimization (50+ API calls, 3-5 minutes)
+- Get the absolute best version
+- Battle-tested against scenarios
+- Production deployment quality
+
+Think of `define` as your **first draft** and `evolve` as your **polished final version**.
+
+---
+
+### Troubleshooting
+
+**"OPENAI_API_KEY not set"**
+- Your `.env` file is already created!
+- Edit it: `nano .env`
+
+**Import errors**
+```bash
+uv sync  # Reinstall dependencies
+```
+
+**Want shorter commands?**
+```bash
+# Install globally
+uv pip install -e .
+# Then just: promptevolve define "your prompt"
+```
 
 ---
 
