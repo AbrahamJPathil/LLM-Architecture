@@ -1,0 +1,6 @@
+# Minimal requirements for testing
+python-dotenv
+pyyaml
+structlog
+openai
+sqlalchemy

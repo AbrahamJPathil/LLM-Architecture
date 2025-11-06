@@ -1,0 +1,212 @@
+# Default configuration for WarmStart
+
+# System Configuration
+system:
+  environment: development
+  log_level: INFO
+  structured_logging: true
+  enable_tracing: true
+
+# LLM Tier Configuration
+llm:
+  # Tier-1: Production (expensive, high quality)
+  tier1:
+    provider: openai
+    model: gpt-4-0125-preview  # Latest GPT-4 with 5K RPM limit
+    temperature: 0.1
+    max_tokens: 3072
+    timeout: 60
+    fallback_provider: xai  # Use XAI if OpenAI hits rate limits
+    fallback_model: grok-beta  # XAI's Grok model
+    
+  # Tier-3: Iteration (cheap, fast)
+  tier3:
+    provider: openai
+    model: gpt-3.5-turbo-0125  # Latest version with 10K RPM limit
+    temperature: 0.7
+    max_tokens: 1024  # Reduced for speed
+    timeout: 30  # Faster timeout
+    fallback_provider: xai  # Use XAI if OpenAI hits rate limits
+    fallback_model: grok-beta  # XAI's Grok model
+    
+  # Judge LLM (evaluation)
+  judge:
+    provider: openai
+    model: gpt-4-0125-preview  # Latest GPT-4 with 5K RPM limit
+    temperature: 0.0
+    max_tokens: 2048
+    timeout: 90
+    
+  # Embeddings
+  embeddings:
+    provider: openai
+    model: text-embedding-3-small
+    dimensions: 1536
+
+# Genetic Algorithm Parameters
+evolution:
+  population_size: 50
+  generations: 50
+  tournament_size: 2
+  elite_percentage: 0.05  # Top 5% preserved (use decimal: 0.05 = 5%)
+  mutation_rate: 0.8
+  crossover_enabled: false  # Start with mutation-only
+  
+  # Mutation strategies (weighted selection)
+  mutation_strategies:
+    rephrase: 0.25          # Linguistic variation
+    add_constraints: 0.20   # Make stricter
+    simplify: 0.15          # Remove verbosity
+    add_examples: 0.20      # Few-shot engineering
+    structural: 0.20        # Format modifications
+  
+  # Stopping criteria
+  stopping:
+    max_generations: 50
+    plateau_generations: 10  # Stop if no improvement
+    target_score: 0.95
+    max_cost_usd: 100.0
+
+# Evaluation Configuration
+evaluation:
+  batch_eval_size: 50  # Testcases per candidate
+  
+  # Fitness function weights
+  weights:
+    accuracy: 0.5
+    consistency: 0.2
+    efficiency: 0.2
+    cost_penalty: 0.1
+  
+  # Validation splits
+  training_ratio: 0.7
+  validation_ratio: 0.15
+  final_test_ratio: 0.15
+  
+  # Deterministic checks
+  deterministic_checks:
+    - schema_validation
+    - regex_patterns
+    - length_constraints
+    - format_validation
+    - safety_filters
+
+# Cost Control
+cost_control:
+  prod_check_cadence: 10  # Check production LLM every N gens
+  prod_check_top_n: 5     # Validate top N candidates
+  
+  # Token budgets
+  max_tokens_per_generation: 500000
+  max_cost_per_generation: 5.0
+  
+  # Context compaction
+  enable_history_condenser: true
+  max_history_tokens: 2000
+  
+  # Production mismatch handling
+  mismatch_threshold: 0.15  # 15% difference triggers alert
+  remove_mismatched: true
+
+# RAG Pattern Library
+rag:
+  vector_db: chromadb  # chromadb, pinecone
+  
+  # Retrieval parameters
+  retrieval_k: 5
+  similarity_threshold: 0.7
+  
+  # Re-ranking
+  rerank_by_effectiveness: true
+  effectiveness_weight: 0.6
+  similarity_weight: 0.4
+  
+  # Warm-start
+  min_patterns_for_warmstart: 3
+  fallback_to_generic: true
+  
+  # Pattern metadata
+  required_metadata:
+    - domain
+    - effectiveness_score
+    - usage_count
+    - created_at
+    - example_transformations
+
+# Dataset Management
+dataset:
+  # Golden set requirements
+  min_golden_samples: 10
+  target_golden_samples: 20
+  
+  # Synthetic generation
+  synthetic_ratio: 5  # 5x synthetic per golden
+  difficulty_distribution:
+    easy: 0.3
+    medium: 0.5
+    hard: 0.2
+  
+  # HITL review
+  hitl_sample_rate: 0.10  # Review 10% of synthetic
+  require_approval: true
+  approval_threshold: 0.90  # 90% approval rate
+
+# Monitoring & Governance
+monitoring:
+  # Production monitoring
+  drift_detection_window: 100  # samples
+  drift_threshold: 0.10
+  
+  # Automated retraining
+  auto_retrain_threshold: 0.85
+  retrain_cooldown_hours: 24
+  
+  # Constitution rules (safety)
+  constitution:
+    - no_pii_exposure
+    - no_harmful_content
+    - no_bias_amplification
+    - factual_grounding
+    - clear_uncertainty
+  
+  # Audit logging
+  log_all_generations: true
+  log_llm_calls: true
+  retention_days: 90
+
+# Domain-Specific Overrides
+domains:
+  legal:
+    config_override: config/domains/legal.yaml
+  medical:
+    config_override: config/domains/medical.yaml
+  code:
+    config_override: config/domains/code.yaml
+
+# Database
+database:
+  url: ${DATABASE_URL}
+  echo: false
+  pool_size: 10
+  max_overflow: 20
+
+# Experiment Tracking
+experiment_tracking:
+  enabled: true
+  backend: mlflow  # mlflow, wandb, simple
+  log_artifacts: true
+  log_parameters: true
+  log_metrics: true
+
+# Performance
+performance:
+  max_concurrent_evaluations: 8     # Max parallel evaluations (was 10)
+  max_concurrent_mutations: 8      # Max parallel mutations with GPT-3.5
+  max_concurrent_judge: 4         # Max parallel Judge calls with GPT-4
+  batch_size: 20
+  use_caching: true
+  cache_ttl_seconds: 3600
+  rate_limits:
+    tier1_rpm: 5000              # GPT-4-0125-preview limit
+    tier3_rpm: 10000             # GPT-3.5-turbo-0125 limit
+    tokens_per_minute: 500000    # Token rate limit

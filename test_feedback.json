@@ -1,0 +1,31 @@
+{
+  "original_prompt": "Do analysis",
+  "optimized_prompt": "Prepare a detailed quarterly earnings report by analyzing revenue, expenses, and profit margins for the past quarter. Ensure the report follows GAAP standards by including a balance sheet, income statement, and cash flow statement. Utilize financial analysis tools such as ratio analysis for a comprehensive evaluation.",
+  "quality_score": 0.91,
+  "context": "Financial reports quarterly earnings",
+  "domain": "general",
+  "generations": 2,
+  "cost_usd": 0,
+  "duration_seconds": 46.83594250679016,
+  "quality_breakdown": {
+    "clarity": 0.95,
+    "specificity": 0.95,
+    "structure": 0.9,
+    "completeness": 0.85,
+    "effectiveness": 0.92,
+    "strengths": [
+      "Highly specific instructions",
+      "Clear structure and organization",
+      "Explicit mention of GAAP standards and financial analysis tools"
+    ],
+    "weaknesses": [
+      "Lacks guidance on data sources",
+      "Does not specify the intended audience or how the report should be presented"
+    ],
+    "suggestions": [
+      "Include instructions on sourcing data",
+      "Specify the target audience for the report",
+      "Recommend a presentation format for the findings"
+    ]
+  }
+}

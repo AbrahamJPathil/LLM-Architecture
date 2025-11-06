@@ -1,0 +1,132 @@
+# Legal Domain Configuration
+# Overrides for legal document processing
+
+domain:
+  name: legal
+  description: Legal document analysis, clause extraction, contract review
+  
+# Domain-specific LLM settings
+llm:
+  tier1:
+    model: gpt-4-0125-preview  # High accuracy for legal (using real OpenAI model)
+    temperature: 0.0  # Deterministic for legal
+    
+  tier3:
+    model: gpt-3.5-turbo-0125  # Fast and cheap for iterations
+    temperature: 0.3  # Lower variance
+    
+# Legal-specific evaluation
+evaluation:
+  weights:
+    accuracy: 0.6  # Higher accuracy weight for legal
+    consistency: 0.25  # Critical for legal
+    efficiency: 0.10
+    cost_penalty: 0.05
+    
+  # Legal-specific checks
+  deterministic_checks:
+    - citation_format_validation
+    - date_format_validation
+    - party_name_consistency
+    - clause_numbering_validation
+    - jurisdiction_validation
+    - legal_terminology_check
+
+# Legal document types
+task_types:
+  - contract_clause_extraction
+  - contract_risk_analysis
+  - legal_entity_recognition
+  - jurisdiction_identification
+  - obligation_extraction
+  - termination_clause_analysis
+  - indemnification_analysis
+  - governing_law_extraction
+  - party_identification
+  - effective_date_extraction
+
+# Legal-specific patterns to bootstrap
+initial_patterns:
+  - name: structured_clause_extraction
+    description: Extract clauses with section references
+    template: |
+      Extract {clause_type} clauses from the contract.
+      For each clause found:
+      1. Quote the exact text
+      2. Provide section reference
+      3. Identify parties involved
+      4. Note any conditions or exceptions
+      
+  - name: risk_assessment_framework
+    description: Systematic risk identification
+    template: |
+      Analyze the contract for {risk_category} risks:
+      1. Identify specific risk clauses
+      2. Assess severity (High/Medium/Low)
+      3. Note ambiguous language
+      4. Suggest clarifications needed
+      
+  - name: entity_extraction_legal
+    description: Extract legal entities with roles
+    template: |
+      Identify all parties and entities:
+      - Party name and role (e.g., "Licensor", "Tenant")
+      - Jurisdiction of formation
+      - Representative information
+      Format as structured JSON.
+
+# Legal rubric for evaluation
+rubric:
+  criteria:
+    - name: accuracy
+      weight: 0.4
+      description: Correct identification of legal elements
+      
+    - name: completeness
+      weight: 0.3
+      description: All relevant clauses/entities found
+      
+    - name: precision
+      weight: 0.2
+      description: No false positives or hallucinations
+      
+    - name: format_compliance
+      weight: 0.1
+      description: Proper citation and structure
+
+# Safety constraints for legal domain
+safety:
+  constitution:
+    - no_legal_advice_disclaimer
+    - cite_source_sections
+    - flag_ambiguities
+    - no_interpretation_beyond_text
+    - preserve_original_language
+    
+  validation_rules:
+    - must_quote_exact_text
+    - must_provide_section_reference
+    - no_paraphrasing_legal_terms
+    - flag_missing_standard_clauses
+
+# Golden dataset requirements
+golden_dataset:
+  min_samples: 20
+  required_contract_types:
+    - employment_agreement
+    - nda
+    - service_agreement
+    - lease_agreement
+    - license_agreement
+    
+  required_jurisdictions:
+    - us_delaware
+    - us_california
+    - us_new_york
+    - uk
+    - common_law_general
+
+# Cost considerations (legal is high-stakes)
+cost_control:
+  prod_check_cadence: 5  # More frequent prod checks
+  mismatch_threshold: 0.05  # Stricter threshold
